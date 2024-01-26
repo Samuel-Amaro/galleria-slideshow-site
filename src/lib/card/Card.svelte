@@ -1,33 +1,34 @@
 <script lang="ts">
+	import { fade, fly } from "svelte/transition";
+
 	export let titleArtwork: string | undefined;
 	export let artistTitle: string | undefined;
 	export let srcImageArtwork: string | undefined;
 	export let href: string;
 </script>
 
-<article>
-	<a
-		{href}
-		target="_self"
-		rel="next"
-		title="Ir para descrição detalhada da obra de arte {titleArtwork}"
-		aria-label="Ir para descrição detalhada da obra de arte {titleArtwork}"
-	>
-		{#if srcImageArtwork}
-			<img src={srcImageArtwork} alt="" />
-      {:else}
-        <p>Sem imagem para esta obra</p>
-		{/if}
-		<div class="text">
-			{#if titleArtwork}
-				<h1>{titleArtwork}</h1>
-			{/if}
-			{#if artistTitle}
-				<h2>{artistTitle}</h2>
-			{/if}
-		</div>
-	</a>
-</article>
+
+{#if srcImageArtwork}
+	<article in:fly={{ delay: 100, y: 0 }} out:fly={{ y: 0 }}>
+		<a
+			{href}
+			target="_self"
+			rel="next"
+			title="Ir para descrição detalhada da obra de arte {titleArtwork}"
+			aria-label="Ir para descrição detalhada da obra de arte {titleArtwork}"
+		>
+			<img src={srcImageArtwork} alt="" in:fade|local/>
+			<div class="text">
+				{#if titleArtwork}
+					<h1>{titleArtwork}</h1>
+				{/if}
+				{#if artistTitle}
+					<h2>{artistTitle}</h2>
+				{/if}
+			</div>
+		</a>
+	</article>
+{/if}
 
 <style>
 	article{
@@ -51,10 +52,14 @@
 		z-index: 1;
 		bottom: 32px;
 		left: 32px;
+		right: 32px;
 	}
 
 	h1, h2{
 		margin: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	h1{
