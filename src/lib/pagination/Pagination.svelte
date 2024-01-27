@@ -11,8 +11,8 @@
 			: parseInt($page.url.searchParams.get('limit') as string)
 		: 15;
 
-  const maxVisiblePages = 5; 
-  const pagesToShowOnSides = 4; 
+	const maxVisiblePages = 5;
+	const pagesToShowOnSides = 4;
 
 	function handleChangeSelect(
 		e: Event & {
@@ -26,22 +26,22 @@
 		});
 	}
 
-  function getVisiblePageNumbers() {
-    const start = Math.max(0, currentPage - pagesToShowOnSides);
-    const end = Math.min(totalPages - 1, currentPage + pagesToShowOnSides);
+	function getVisiblePageNumbers() {
+		const start = Math.max(0, currentPage - pagesToShowOnSides);
+		const end = Math.min(totalPages - 1, currentPage + pagesToShowOnSides);
 
-    const visiblePages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+		const visiblePages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
-    if (visiblePages[0] !== 0) {
-      visiblePages.unshift(0);
-    }
+		if (visiblePages[0] !== 0) {
+			visiblePages.unshift(0);
+		}
 
-    if (visiblePages[visiblePages.length - 1] !== totalPages - 1) {
-      visiblePages.push(totalPages - 1);
-    }
+		if (visiblePages[visiblePages.length - 1] !== totalPages - 1) {
+			visiblePages.push(totalPages - 1);
+		}
 
-    return visiblePages;
-  }
+		return visiblePages;
+	}
 </script>
 
 <div>
@@ -54,7 +54,8 @@
 						aria-label="Página {pageNumber + 1}"
 						aria-current={pageNumber + 1 === currentPage ? true : false}
 						rel="next"
-						target="_self">{pageNumber + 1}</a>
+						target="_self">{pageNumber + 1}</a
+					>
 				</li>
 			{/each}
 		</ul>
@@ -64,7 +65,7 @@
 		<select id="limits" bind:value={limit} on:change={(e) => handleChangeSelect(e)}>
 			<option value={15}>15</option>
 			<option value={30}>30</option>
-			<option value={50} >50</option>
+			<option value={50}>50</option>
 			<option value={80}>80</option>
 			<option value={100}>100</option>
 		</select>
@@ -72,7 +73,7 @@
 </div>
 
 <style>
-	ul{
+	ul {
 		list-style: none;
 		display: flex;
 		flex-flow: row wrap;
@@ -81,7 +82,7 @@
 		gap: 30px;
 	}
 
-	a{
+	a {
 		text-decoration: none;
 		display: flex;
 		justify-content: center;
@@ -97,22 +98,23 @@
 		padding: 7px;
 	}
 
-	a:hover, a:focus{
+	a:hover,
+	a:focus {
 		color: var(--color01);
 	}
 
-	nav{
+	nav {
 		margin: 0 0 32px 0;
 	}
 
-	label{
+	label {
 		font-size: 14px;
 		font-weight: 400;
 		color: var(--color02);
 		display: block;
 	}
 
-	select{
+	select {
 		display: block;
 		font-family: inherit;
 		font-size: 14px;
@@ -124,7 +126,7 @@
 		box-shadow: inset 1px 1px 3px #ccc;
 	}
 
-	.group{
+	.group {
 		display: flex;
 		align-items: flex-end;
 		gap: 20px;

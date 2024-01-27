@@ -1,21 +1,21 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
-:root{
-  --color01: #000;
-  --color02: #7D7D7D;
-  --color03: #E5E5E5;
-  --color04: #F3F3F3;
-  --color05: #ffffff;
+:root {
+	--color01: #000;
+	--color02: #7d7d7d;
+	--color03: #e5e5e5;
+	--color04: #f3f3f3;
+	--color05: #ffffff;
 }
 
-html{
-  font-family: 'Libre Baskerville', serif;
+html {
+	font-family: 'Libre Baskerville', serif;
 }
 
-body{
-  background-color: var(--color05);
+body {
+	background-color: var(--color05);
 }
