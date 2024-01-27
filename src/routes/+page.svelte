@@ -3,20 +3,21 @@
 	import Galleria from '$lib/icons/Galleria.svelte';
 	import MatchMedia from '$lib/matchmedia/MatchMedia.svelte';
 	import Pagination from '$lib/pagination/Pagination.svelte';
-	import { artworksStore } from '../stores/data-store';
-	import type { PageData  } from './$types';
+	import SkeletonHome from '$lib/skeletonhome/SkeletonHome.svelte';
+	import { artworksStore } from '$lib/stores/data-store';
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	$: if(data) {
+	$: if (data) {
 		(async () => {
 			try {
-				const results = await data.results
-				artworksStore.set(results.data)
+				const results = await data.results;
+				artworksStore.set(results.data);
 			} catch (error) {
-				throw new Error("Error ao carregar dados!!")
+				throw new Error('Error ao carregar dados!!');
 			}
-		})()
+		})();
 	}
 </script>
 
@@ -28,31 +29,36 @@
 </header>
 <hr />
 {#await data.results}
-	<p>carregando obras de arte...</p>
-{:then results} 
+	<SkeletonHome />
+{:then results}
 	<main>
 		{#each results.data as artwork}
 			<Card
 				titleArtwork={artwork.title}
 				artistTitle={artwork.artist_title}
-				srcImageArtwork={artwork.image_id ? `${results.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg` : undefined}
+				srcImageArtwork={artwork.image_id
+					? `${results.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`
+					: undefined}
 				href={'#'}
 			/>
 		{/each}
 	</main>
 	<footer>
-		<Pagination totalPages={results.pagination.total_pages} currentPage={results.pagination.current_page} />
+		<Pagination
+			totalPages={results.pagination.total_pages}
+			currentPage={results.pagination.current_page}
+		/>
 	</footer>
-	{:catch error}
-		<p role="alert">Houve um erro ao carregar obras de arte: {error.message}</p>
+{:catch error}
+	<p role="alert">Houve um erro ao carregar obras de arte: {error.message}</p>
 {/await}
 
 <style>
-	header{
+	header {
 		padding: 24px 24px 23px 24px;
 	}
 
-	hr{
+	hr {
 		display: block;
 		border: 0;
 		height: 1px;
@@ -60,7 +66,7 @@
 		margin: 0 0 23px 0;
 	}
 
-	main{
+	main {
 		-webkit-column-width: 324px;
 		-moz-column-width: 324px;
 		column-width: 324px;
@@ -69,11 +75,12 @@
 		column-gap: 23px;
 	}
 
-	main, footer{
+	main,
+	footer {
 		padding: 0 24px 24px 24px;
 	}
 
-	:global(article:not(:last-child)){
+	:global(article:not(:last-child)) {
 		margin: 0 0 24px 0;
 	}
 </style>
