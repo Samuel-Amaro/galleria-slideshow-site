@@ -44,33 +44,31 @@
 	}
 </script>
 
-<div>
-	<nav aria-label="pagination">
-		<ul>
-			{#each getVisiblePageNumbers() as pageNumber (pageNumber)}
-				<li>
-					<a
-						href="/?page={pageNumber + 1}&limit={limit}"
-						aria-label="Página {pageNumber + 1}"
-						aria-current={pageNumber + 1 === currentPage ? true : false}
-						rel="next"
-						target="_self">{pageNumber + 1}</a
-					>
-				</li>
-			{/each}
-		</ul>
-	</nav>
-	<div class="group">
-		<label for="limits">Limite de obras por página</label>
-		<select id="limits" bind:value={limit} on:change={(e) => handleChangeSelect(e)}>
-			<option value={15}>15</option>
-			<option value={30}>30</option>
-			<option value={50}>50</option>
-			<option value={80}>80</option>
-			<option value={100}>100</option>
-		</select>
-	</div>
-</div>
+
+<nav aria-label="pagination">
+	<ul>
+		{#each getVisiblePageNumbers() as pageNumber (pageNumber)}
+			<li>
+				<a
+					href="/?page={pageNumber + 1}&limit={limit}"
+					aria-label="Página {pageNumber + 1}"
+					aria-current={pageNumber + 1 === currentPage ? true : false}
+					rel="next"
+					target="_self">{pageNumber + 1}</a
+				>
+			</li>
+		{/each}
+		<li>
+			<select id="limits" bind:value={limit} on:change={(e) => handleChangeSelect(e)} aria-label="Limite de obras por página" title="Limite de obras por página">
+				<option value={15}>15</option>
+				<option value={30}>30</option>
+				<option value={50}>50</option>
+				<option value={80}>80</option>
+				<option value={100}>100</option>
+			</select>
+		</li>
+	</ul>
+</nav>
 
 <style>
 	ul {
@@ -79,7 +77,7 @@
 		flex-flow: row wrap;
 		justify-content: center;
 		align-items: center;
-		gap: 30px;
+		gap: 10px;
 	}
 
 	a {
@@ -103,17 +101,6 @@
 		color: var(--color01);
 	}
 
-	nav {
-		margin: 0 0 32px 0;
-	}
-
-	label {
-		font-size: 14px;
-		font-weight: 400;
-		color: var(--color02);
-		display: block;
-	}
-
 	select {
 		display: block;
 		font-family: inherit;
@@ -124,11 +111,5 @@
 		color: var(--color02);
 		border-radius: 5px;
 		box-shadow: inset 1px 1px 3px #ccc;
-	}
-
-	.group {
-		display: flex;
-		align-items: flex-end;
-		gap: 20px;
 	}
 </style>
