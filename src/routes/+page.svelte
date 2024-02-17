@@ -1,71 +1,62 @@
 <script lang="ts">
 	import Card from '$lib/card/Card.svelte';
-	import Galleria from '$lib/icons/Galleria.svelte';
-	import MatchMedia from '$lib/matchmedia/MatchMedia.svelte';
 	import Pagination from '$lib/pagination/Pagination.svelte';
+	import { page } from '$app/stores';
 	import SkeletonHome from '$lib/skeletonhome/SkeletonHome.svelte';
-	import { artworksStore } from '$lib/stores/data-store';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	$: if (data) {
-		(async () => {
-			try {
-				const results = await data.results;
-				artworksStore.set(results.data);
-			} catch (error) {
-				throw new Error('Error ao carregar dados!!');
-			}
-		})();
+	async function getDatas() {
+		return data;
 	}
+
+	$: pageParam = $page.url.searchParams.get('page')
+		? isNaN(parseInt($page.url.searchParams.get('page') as string))
+			? 1
+			: parseInt($page.url.searchParams.get('page') as string)
+		: 1;
+	$: limitParam = $page.url.searchParams.get('limit')
+		? isNaN(parseInt($page.url.searchParams.get('limit') as string))
+			? 15
+			: Math.abs(parseInt($page.url.searchParams.get('limit') as string)) > 0 &&
+				  Math.abs(parseInt($page.url.searchParams.get('limit') as string)) < 15
+				? 15
+				: Math.abs(parseInt($page.url.searchParams.get('limit') as string))
+		: 15;
 </script>
 
-<header>
-	<MatchMedia mediaQuery="(min-width: 700px)">
-		<Galleria slot="mobile" layout="mobile" />
-		<Galleria slot="desktop" layout="desktop" />
-	</MatchMedia>
-</header>
-<hr />
-{#await data.results}
+{#await getDatas()}
 	<SkeletonHome />
-{:then results}
-	<main>
-		{#each results.data as artwork}
-			<Card
-				titleArtwork={artwork.title}
-				artistTitle={artwork.artist_title}
-				srcImageArtwork={artwork.image_id
-					? `${results.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`
-					: undefined}
-				href={'#'}
-			/>
-		{/each}
-	</main>
+{:then result}
+	{@const datasFiltered = result.artworks.data.filter((artwork) => artwork.image_id ? true : false)}
+		<main>
+			{#if datasFiltered.length > 0}
+				{#each datasFiltered as artwork}
+					<Card
+						titleArtwork={artwork.title}
+						artistTitle={artwork.artist_title}
+						srcImageArtwork={artwork.image_id
+							? `${result.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`
+							: undefined}
+						href={`/detail/${artwork.id}?page=${pageParam}&limit=${limitParam}`}
+					/>
+				{/each}
+			{:else}
+				<h4 role="alert">No artworks to view in page</h4>
+			{/if}
+		</main>
 	<footer>
 		<Pagination
-			totalPages={results.pagination.total_pages}
-			currentPage={results.pagination.current_page}
+			totalPages={result.artworks.pagination.total_pages}
+			currentPage={result.artworks.pagination.current_page}
 		/>
 	</footer>
 {:catch error}
-	<p role="alert">Houve um erro ao carregar obras de arte: {error.message}</p>
+	<h4 role="alert">Error ao carregar na home {error}</h4>
 {/await}
 
 <style>
-	header {
-		padding: 24px 24px 23px 24px;
-	}
-
-	hr {
-		display: block;
-		border: 0;
-		height: 1px;
-		background-color: var(--color03);
-		margin: 0 0 23px 0;
-	}
-
 	main {
 		-webkit-column-width: 324px;
 		-moz-column-width: 324px;
@@ -75,12 +66,28 @@
 		column-gap: 23px;
 	}
 
-	main,
-	footer {
-		padding: 0 24px 24px 24px;
+	main {
+		padding: 0 24px 128px 24px;
 	}
 
 	:global(article:not(:last-child)) {
 		margin: 0 0 24px 0;
+	}
+
+	h4 {
+		color: var(--color01);
+		font-size: 28px;
+		text-align: center;
+		margin: 20px 0;
+	}
+
+	footer {
+		background-color: var(--color05);
+		position: fixed;
+		bottom: 0;
+		z-index: 2;
+		width: 100%;
+		padding: 12px;
+		box-shadow: inset 1px 1px 3px #ccc;
 	}
 </style>
