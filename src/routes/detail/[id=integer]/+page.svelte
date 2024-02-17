@@ -5,12 +5,11 @@
 	import BackButton from '$lib/icons/BackButton.svelte';
 	import NextButton from '$lib/icons/NextButton.svelte';
 	import ViewImage from '$lib/icons/ViewImage.svelte';
+	import { pushState } from '$app/navigation';
+	import Lightbox from '$lib/lightbox/Lightbox.svelte';
 
 	export let data: PageData;
 	let thisImage: HTMLImageElement;
-
-	//TODO: CONSTRUIR LIGHTBOX DE VIEW IMAGE
-	//TODO: E ARRUMAR UM BOX PARA CARD QUE NÃO HA IMAGENS COLOCAR UMA MENSAGEM NO IMAGE CUSTOMIZADO
 
 	$: pageParam = $page.url.searchParams.get('page')
 		? isNaN(parseInt($page.url.searchParams.get('page') as string))
@@ -32,7 +31,7 @@
 	}
 
 	$: artwork = getData(parseInt($page.params.id));
-	$: newDatasFiltered = data.artworks.data.filter((artwork) => artwork.image_id ? true : false)
+	$: newDatasFiltered = data.artworks.data.filter((artwork) => (artwork.image_id ? true : false));
 
 	function nextIdSlide(idxCurrent: number) {
 		if (idxCurrent < newDatasFiltered.length - 1) {
@@ -47,6 +46,12 @@
 		}
 		return newDatasFiltered[newDatasFiltered.length - 1].id;
 	}
+
+	function handleShowLightbox() {
+		pushState('', {
+			showLightbox: true
+		});
+	}
 </script>
 
 <main>
@@ -54,25 +59,34 @@
 		<section class="sectionImage">
 			<picture class="picture">
 				{#if artwork.image_id}
-						<source
-							srcset={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
-							media="(max-width: 400px)"
-							type="image/jpeg"
-						/>
-						<source
-							srcset={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/600,/0/default.jpg`}
-							media="(min-width: 400px)"
-							type="image/jpeg"
-						/>
-						<img
-							src={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
-							alt=""
-							loading="eager"
-							bind:this={thisImage}
-						/>
+					<source
+						srcset={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
+						media="(max-width: 400px)"
+						type="image/jpeg"
+					/>
+					<source
+						srcset={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/600,/0/default.jpg`}
+						media="(min-width: 400px)"
+						type="image/jpeg"
+					/>
+					<img
+						src={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
+						alt=""
+						loading="eager"
+						bind:this={thisImage}
+					/>
 				{/if}
 			</picture>
-			<button type="button" title="View Image" class="btnViewImage" class:hiddenBtnViewImage={artwork.image_id ? false : true}>
+			<button
+				type="button"
+				title="View Image"
+				class="btnViewImage"
+				class:hiddenBtnViewImage={artwork.image_id ? false : true}
+				on:click={handleShowLightbox}
+				on:keydown={(e) => {
+					if (e.key === '') handleShowLightbox();
+				}}
+			>
 				<span class="btnViewImageIcon">
 					<ViewImage />
 				</span>
@@ -80,7 +94,10 @@
 			</button>
 		</section>
 		<section class="sectionAgent">
-			<header class="sectionAgentHeader" class:NoPositionSectionAgentHeader={artwork.image_id ? false : true}>
+			<header
+				class="sectionAgentHeader"
+				class:NoPositionSectionAgentHeader={artwork.image_id ? false : true}
+			>
 				{#if artwork.title}
 					<h1 class="sectionAgentTitle">{artwork.title}</h1>
 				{/if}
@@ -96,9 +113,17 @@
 				</ul>
 			{/if}
 		</section>
-		<section class="sectionArtwork" class:noPaddginSectionArtwork={artwork.description && (artwork.date_start || artwork.date_end) ? false : true}>
+		<section
+			class="sectionArtwork"
+			class:noPaddginSectionArtwork={artwork.description && (artwork.date_start || artwork.date_end)
+				? false
+				: true}
+		>
 			{#if artwork.date_start || artwork.date_end}
-				<h3 class="sectionArtworkDate" class:noPositionSectionArtworkDate={artwork.description ? false : true}>
+				<h3
+					class="sectionArtworkDate"
+					class:noPositionSectionArtworkDate={artwork.description ? false : true}
+				>
 					{artwork.date_start || artwork.date_end}
 				</h3>
 			{/if}
@@ -157,6 +182,13 @@
 		</div>
 	{/if}
 </footer>
+{#if $page.state.showLightbox && artwork && artwork.image_id}
+	<Lightbox
+		srcImage={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
+		close={() => history.back()}
+	/>
+{/if}
+
 <style>
 	main {
 		padding: 24px 24px 100px 23px;
@@ -174,7 +206,7 @@
 		box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 	}
 
-	.picture img{
+	.picture img {
 		min-width: 327px;
 		min-height: 280px;
 	}
@@ -218,7 +250,7 @@
 		background-color: rgba(256, 256, 256, 0.25);
 	}
 
-	.hiddenBtnViewImage{
+	.hiddenBtnViewImage {
 		display: none;
 	}
 
@@ -272,11 +304,11 @@
 		padding-top: 74px;
 	}
 
-	.noPaddginSectionArtwork{
+	.noPaddginSectionArtwork {
 		padding: 0;
 	}
 
-	.NoPositionSectionAgentHeader{
+	.NoPositionSectionAgentHeader {
 		position: static;
 		margin-bottom: 15px;
 	}
@@ -292,7 +324,7 @@
 		z-index: 0;
 	}
 
-	.noPositionSectionArtworkDate{
+	.noPositionSectionArtworkDate {
 		position: static;
 	}
 
@@ -356,7 +388,7 @@
 		stroke: #ababab;
 	}
 
-	.textMessage{
+	.textMessage {
 		font-weight: 700;
 		font-size: 18px;
 		color: var(--color01);
