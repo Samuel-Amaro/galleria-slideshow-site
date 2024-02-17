@@ -44,7 +44,6 @@
 	}
 </script>
 
-
 <nav aria-label="pagination">
 	<ul>
 		{#each getVisiblePageNumbers() as pageNumber (pageNumber)}
@@ -59,7 +58,13 @@
 			</li>
 		{/each}
 		<li>
-			<select id="limits" bind:value={limit} on:change={(e) => handleChangeSelect(e)} aria-label="Limite de obras por página" title="Limite de obras por página">
+			<select
+				id="limits"
+				bind:value={limit}
+				on:change={(e) => handleChangeSelect(e)}
+				aria-label="Limite de obras por página"
+				title="Limite de obras por página"
+			>
 				<option value={15}>15</option>
 				<option value={30}>30</option>
 				<option value={50}>50</option>
