@@ -20,22 +20,22 @@
 		padding: 164px 32px 33px 32px;
 	}
 
-  .title{
-    display: block;
-    content: "";
-    width: 100%;
-    height: 30px;
-    background-color: var(--color04);
-    border-radius: 8px;
-    margin: 0 0 7px 0;
-  }
+	.title {
+		display: block;
+		content: '';
+		width: 100%;
+		height: 30px;
+		background-color: var(--color04);
+		border-radius: 8px;
+		margin: 0 0 7px 0;
+	}
 
-  .description{
-    display: block;
-    content: "";
-    width: 100%;
-    height: 16px;
-    background-color: var(--color04);
-    border-radius: 8px;
-  }
+	.description {
+		display: block;
+		content: '';
+		width: 100%;
+		height: 16px;
+		background-color: var(--color04);
+		border-radius: 8px;
+	}
 </style>
