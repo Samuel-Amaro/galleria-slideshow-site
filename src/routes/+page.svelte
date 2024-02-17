@@ -29,23 +29,25 @@
 {#await getDatas()}
 	<SkeletonHome />
 {:then result}
-	{@const datasFiltered = result.artworks.data.filter((artwork) => artwork.image_id ? true : false)}
-		<main>
-			{#if datasFiltered.length > 0}
-				{#each datasFiltered as artwork}
-					<Card
-						titleArtwork={artwork.title}
-						artistTitle={artwork.artist_title}
-						srcImageArtwork={artwork.image_id
-							? `${result.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`
-							: undefined}
-						href={`/detail/${artwork.id}?page=${pageParam}&limit=${limitParam}`}
-					/>
-				{/each}
-			{:else}
-				<h4 role="alert">No artworks to view in page</h4>
-			{/if}
-		</main>
+	{@const datasFiltered = result.artworks.data.filter((artwork) =>
+		artwork.image_id ? true : false
+	)}
+	<main>
+		{#if datasFiltered.length > 0}
+			{#each datasFiltered as artwork}
+				<Card
+					titleArtwork={artwork.title}
+					artistTitle={artwork.artist_title}
+					srcImageArtwork={artwork.image_id
+						? `${result.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`
+						: undefined}
+					href={`/detail/${artwork.id}?page=${pageParam}&limit=${limitParam}`}
+				/>
+			{/each}
+		{:else}
+			<h4 role="alert">No artworks to view in page</h4>
+		{/if}
+	</main>
 	<footer>
 		<Pagination
 			totalPages={result.artworks.pagination.total_pages}
