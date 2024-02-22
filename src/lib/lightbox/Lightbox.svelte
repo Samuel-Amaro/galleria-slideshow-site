@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
 
 	export let srcImage: string;
 	export let close: () => void;
@@ -26,14 +25,19 @@
 	}
 </script>
 
-<dialog bind:this={dialogEl} in:fly={{ y: 200, duration: 1000 }} out:fade>
+<svelte:window on:keydown={(e) => {
+	if(e.code === 'Escape' || e.code === 'Esc')
+		handleClose()
+}}/>
+
+<dialog bind:this={dialogEl}>
 	<div>
 		<button
 			type="button"
 			title="Close Lightbox"
 			on:click={handleClose}
 			on:keydown={(e) => {
-				if (e.key === 'Enter' || e.key === '') handleClose();
+				if (e.code === '') handleClose();
 			}}>CLOSE</button
 		>
 		<img src={srcImage} alt="" />
@@ -43,7 +47,7 @@
 <style>
 	dialog {
 		border: none;
-		padding: 0 24px;
+		padding: 24px;
 		margin: 0;
 		max-width: 100%;
 		max-height: 100%;
@@ -53,7 +57,7 @@
 		display: flex;
 		flex-flow: column nowrap;
 		align-items: center;
-		justify-content: center;
+		overflow: auto;
 	}
 
 	img {
@@ -74,6 +78,10 @@
 		color: var(--color05);
 		margin: 0 0 33px auto;
 		cursor: pointer;
+	}
+
+	div{
+		margin: auto 0;
 	}
 
 	button:is(:hover, :focus) {

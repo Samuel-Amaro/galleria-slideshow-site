@@ -53,8 +53,11 @@
 					aria-label="Página {pageNumber + 1}"
 					aria-current={pageNumber + 1 === currentPage ? true : false}
 					rel="next"
-					target="_self">{pageNumber + 1}</a
-				>
+					target="_self"
+					class:selected={pageNumber + 1 === currentPage}
+					>
+						{pageNumber + 1}
+					</a>
 			</li>
 		{/each}
 		<li>
@@ -104,6 +107,15 @@
 	a:hover,
 	a:focus {
 		color: var(--color01);
+	}
+
+	.selected{
+		background-color: var(--color01);
+		color: var(--color05);
+	}
+
+	.selected:is(:hover, :focus) {
+		color: var(--color03);
 	}
 
 	select {

@@ -18,7 +18,7 @@
 		aria-current={$page.url.pathname === '/'}
 		class="logo"
 	>
-		<MatchMedia mediaQuery="(min-width: 700px)">
+		<MatchMedia mediaQuery="(min-width: 1300px)">
 			<Galleria slot="mobile" layout="mobile" />
 			<Galleria slot="desktop" layout="desktop" />
 		</MatchMedia>
@@ -79,5 +79,30 @@
 
 	.slide:is(:hover, :focus) {
 		color: var(--color01);
+	}
+
+	@media screen and (min-width: 650px) {
+		header {
+			padding: 29px 40px;
+		}
+
+		hr {
+			margin: 0 0 38px 0;
+		}
+
+		.slide {
+			font-size: 12px;
+			letter-spacing: 2.57px;
+		}
+	}
+
+	@media screen and (min-width: 1300px) {
+		header {
+			padding: 40px;
+		}
+
+		hr {
+			margin: 0 40px 40px 40px;
+		}
 	}
 </style>

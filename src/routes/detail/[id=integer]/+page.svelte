@@ -7,6 +7,9 @@
 	import ViewImage from '$lib/icons/ViewImage.svelte';
 	import { pushState } from '$app/navigation';
 	import Lightbox from '$lib/lightbox/Lightbox.svelte';
+	import MatchMedia from "$lib/matchmedia/MatchMedia.svelte"
+
+	//TODO: E ADD STYLES DESKTOP EM TUDO
 
 	export let data: PageData;
 	let thisImage: HTMLImageElement;
@@ -164,7 +167,10 @@
 					aria-label="Back Slide"
 					class="footerButton"
 				>
-					<BackButton />
+					<MatchMedia mediaQuery="(min-width: 700px)">
+						<BackButton slot="mobile" />
+						<BackButton slot="desktop" size={25}/>
+					</MatchMedia>
 				</a>
 				<a
 					href={`/detail/${nextIdSlide(
@@ -176,17 +182,32 @@
 					aria-label="Next Slide"
 					class="footerButton"
 				>
-					<NextButton />
+					<MatchMedia mediaQuery="(min-width: 700px)">
+						<NextButton slot="mobile"/>
+						<NextButton slot="desktop" size={25}/>
+					</MatchMedia>
 				</a>
 			</div>
 		</div>
 	{/if}
 </footer>
 {#if $page.state.showLightbox && artwork && artwork.image_id}
-	<Lightbox
-		srcImage={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
-		close={() => history.back()}
-	/>
+	<MatchMedia mediaQuery="(min-width: 700px)">
+		<Lightbox
+			srcImage={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/400,/0/default.jpg`}
+			close={() => {
+				history.back()
+			}}
+			slot="mobile"
+		/>
+		<Lightbox
+			srcImage={`${data.artworks.config.iiif_url}/${artwork.image_id}/full/843,/0/default.jpg`}
+			close={() => {
+				history.back()
+			}}
+			slot="desktop"
+		/>
+	</MatchMedia>
 {/if}
 
 <style>
@@ -292,7 +313,6 @@
 		background-color: var(--color01);
 		padding: 5px 10px;
 		border-radius: 4px;
-		white-space: nowrap;
 	}
 
 	.sectionAgent {
@@ -369,7 +389,7 @@
 
 	.footerButtons {
 		display: flex;
-		gap: 23px;
+		gap: 40px;
 	}
 
 	.footerButton {
@@ -393,5 +413,114 @@
 		font-size: 18px;
 		color: var(--color01);
 		text-align: center;
+	}
+
+	@media screen and (min-width: 700px) {
+		main {
+			padding: 0 40px 100px 40px;
+			display: grid;
+			grid-template-columns: minmax(min-content, 475px) minmax(min-content, 400px);
+			grid-template-areas: 
+				"a b"
+				"c c";
+			column-gap: 30px;
+			row-gap: 64px;
+			justify-content: center;
+		}
+
+		.sectionImage{
+			grid-area: a;
+			height: min-content;
+		}
+
+		.sectionAgent{
+			grid-area: b;
+			margin-bottom: 0;
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-between;
+			gap: 10px;
+			height: 100%;
+		}
+
+		.sectionArtwork{
+			grid-area: c;
+		}		
+
+		.btnViewImage {
+			bottom: 16px;
+			top: auto;
+			left: 16px;
+		}
+
+		.sectionAgentHeader {
+			position: static;
+			top: auto;
+			max-width: 100%;
+			max-height: 100%;
+			width: 100%;
+			left: auto;
+			padding: 0;
+			margin-bottom: 0;
+			box-shadow: none;
+		}
+
+		.sectionAgentTitle {
+			font-size: 56px;
+			line-height: 64px;
+			margin: 0 0 24px 0;
+		}
+
+		.sectionArtwork {
+			position: relative;
+			padding-top: 0;
+			padding: 75px 0 0 115px; 
+		}
+
+		.sectionArtworkDate {
+			line-height: 150px;
+			font-size: 200px;
+			font-weight: 700;
+			top: 0;
+			right: auto;
+			left: 0;
+		}
+
+		.footerContainer {
+			padding: 25px 41px 24px 41px;
+		}
+
+		.footerTitle {
+			font-size: 18px;
+			margin-bottom: 8px;
+		}
+
+		.footerSubtitle {
+			font-size: 13px;
+		}
+	}
+
+	@media screen and (min-width: 1300px) {
+		main {
+			padding: 35px 40px 175px 40px;
+			grid-template-columns: minmax(min-content, 600px) minmax(min-content, 400px) 475px;
+			grid-template-areas: "a b c";
+			row-gap: auto;
+		}
+
+		.sectionArtwork {
+			padding-top: 0;
+			padding: 115px 0 0 0; 
+		}
+
+		.sectionAgentTitle {
+			font-size: 25.5px;
+			line-height: 33px;
+		}
+
+		.sectionArtworkDate {
+			line-height: 150px;
+			font-size: 150px;
+		}
 	}
 </style>

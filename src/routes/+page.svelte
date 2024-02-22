@@ -66,9 +66,6 @@
 		-webkit-column-gap: 23px;
 		-moz-column-gap: 23px;
 		column-gap: 23px;
-	}
-
-	main {
 		padding: 0 24px 128px 24px;
 	}
 
@@ -91,5 +88,30 @@
 		width: 100%;
 		padding: 12px;
 		box-shadow: inset 1px 1px 3px #ccc;
+	}
+
+
+	@media screen and (min-width: 650px) {
+		main {
+			padding: 0 40px 128px 40px;
+			column-gap: 40px;
+			row-gap: 40px;
+		}
+	}
+
+	@media screen and (min-width: 1300px) {
+		main {
+			-webkit-column-width: 310px;
+			-moz-column-width: 310px;
+			column-width: 310px;
+			-webkit-column-gap: 40px;
+			-moz-column-gap: 40px;
+			column-gap: 40px;
+			padding: 0 40px 128px 40px;
+		}
+
+		:global(article:not(:last-child)) {
+			margin: 0 0 40px 0;
+		}
 	}
 </style>
