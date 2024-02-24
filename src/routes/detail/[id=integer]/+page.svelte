@@ -9,8 +9,6 @@
 	import Lightbox from '$lib/lightbox/Lightbox.svelte';
 	import MatchMedia from "$lib/matchmedia/MatchMedia.svelte"
 
-	//TODO: E ADD STYLES DESKTOP EM TUDO
-
 	export let data: PageData;
 	let thisImage: HTMLImageElement;
 

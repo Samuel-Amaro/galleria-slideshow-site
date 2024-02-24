@@ -31,8 +31,8 @@ Os usuários devem ser capazes de:
 
 ### Links
 
-- Repositorio GitHub: [Repositorio](#)
-- Resultado: [Resultado](#)
+- Repositorio GitHub: [Repositorio](https://github.com/Samuel-Amaro/galleria-slideshow-site)
+- Resultado: [Resultado](https://galleria-slideshow-site-seven.vercel.app/)
 
 ## Meu processo
 
